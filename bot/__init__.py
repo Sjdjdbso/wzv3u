@@ -1,4 +1,16 @@
 #!/usr/bin/env python3
+import asyncio
+from uvloop import install as _install_uvloop
+
+# Install uvloop + ensure main thread has an event loop BEFORE importing pyrogram.
+# Pyrogram's sync.py calls asyncio.get_event_loop() at import-time, which raises
+# RuntimeError on Python >=3.14 (and uvloop>=0.21) when no loop exists in main thread.
+_install_uvloop()
+try:
+    asyncio.get_event_loop()
+except RuntimeError:
+    asyncio.set_event_loop(asyncio.new_event_loop())
+
 from tzlocal import get_localzone
 from pytz import timezone
 from datetime import datetime
@@ -27,12 +39,7 @@ from logging import (
     info as log_info,
     warning as log_warning,
 )
-from uvloop import install
-
-# from faulthandler import enable as faulthandler_enable
-# faulthandler_enable()
-
-install()
+# uvloop is already installed at the top of this file (must run before pyrogram import)
 setdefaulttimeout(600)
 
 pyroutils.MIN_CHAT_ID = -999999999999

@@ -1,6 +1,13 @@
 #!/usr/bin/env python3
 # Monkey-patch re module for Python 3.12+ compatibility
 # lk21's vendored exrex.py uses re.sre_parse and re.U which were removed in Python 3.12+
+# Monkey-patch urllib.parse for Python 3.12+ IPv6 strict mode
+# lk21's bypasser.py generates URLs from regex patterns and parses them with urlparse.
+# Python 3.12+ raises ValueError("Invalid IPv6 URL") for malformed brackets.
+# Override _check_bracketed_netloc to silently accept any input.
+import urllib.parse as _urllib_parse
+_urllib_parse._check_bracketed_netloc = lambda netloc: None
+
 import re as _re
 if not hasattr(_re, 'sre_parse'):
     try:

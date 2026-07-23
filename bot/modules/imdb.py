@@ -24,7 +24,7 @@ class _LazyCinemagoer:
         if _imdb_instance is None:
             try:
                 from imdb import Cinemagoer
-                _imdb_instance = Cinemagoer()
+                _imdb_instance = Cinemagoer('s3', 'sqlite:///cinemagoer.db')
             except Exception as e:
                 from bot import LOGGER
                 LOGGER.warning(f"Cinemagoer unavailable: {e}. IMDb lookups disabled.")

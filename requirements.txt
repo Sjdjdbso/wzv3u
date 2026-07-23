@@ -45,3 +45,4 @@ uvloop
 xattr
 yt-dlp[default,curl-cffi]
 pytz
+pymediainfo>=6.1.0
